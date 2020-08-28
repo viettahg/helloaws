@@ -24,4 +24,13 @@ Route::group([
 {
     Route::post('register', 'JWTAuthController@register');
     Route::post('login', 'JWTAuthController@login');
+    //Route::get('weathers', 'WeathersController@index');
+});
+
+Route::group([
+    'middleware'=>'auth:api',
+    //'prefix'=>'auth'
+], function ($router)
+{
+    Route::get('weathers', 'WeathersController@index');
 });

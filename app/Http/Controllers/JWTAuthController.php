@@ -16,20 +16,29 @@ class JWTAuthController extends Controller
 
     public function register(Request $request)
     {
-        Log::debug('An informational message.');
+        //Log::debug('An informational message.');
+        //dd($request->all());
         
         $validator = Validator::make($request->all(),[
             'name'=>'required|between:2,100',
             'email'=>'required|email|unique:users|max:50',
-            'password'=>'required|confirmed|string|min:6',
+            'password'=>'required|string|min:6',
         ]);
+
+        
+
+        if ($validator->fails())
+        {
+            //dd('1');
+            return response()->json($validator->errors(), 422);
+        }
 
         $user = User::create(array_merge(
             $validator->validated(),
             ['password'=>bcrypt($request->password)]
         ));
 
-
+        //dump($user);
 
         return response()->json([
             'message'=>'Successfully registered',
